@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Responsiva</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="calculadora">
+        <div class="pantalla">
+            <div class="operacion" id="operacion"></div>
+            <div class="resultado" id="resultado">0</div>
+        </div>
+        <div class="botones">
+            <!-- Primera fila -->
+            <button class="limpiar" onclick="limpiarTodo()">C</button>
+            <button class="borrar" onclick="borrar()">←</button>
+            <button class="operador" onclick="agregarFraccion()">a/b</button>
+            <button class="operador" onclick="agregarOperador('/')">/</button>
+            <button class="operador" onclick="calcularPorcentaje()">%</button>
+            
+            <!-- Segunda fila -->
+            <button onclick="agregarNumero(7)">7</button>
+            <button onclick="agregarNumero(8)">8</button>
+            <button onclick="agregarNumero(9)">9</button>
+            <button class="operador" onclick="agregarOperador('*')">×</button>
+            <button class="operador" onclick="calcularRaizCuadrada()">√</button>
+            
+            <!-- Tercera fila -->
+            <button onclick="agregarNumero(4)">4</button>
+            <button onclick="agregarNumero(5)">5</button>
+            <button onclick="agregarNumero(6)">6</button>
+            <button class="operador" onclick="agregarOperador('-')">-</button>
+            <button class="operador" onclick="calcularCuadrado()">x²</button>
+            
+            <!-- Cuarta fila -->
+            <button onclick="agregarNumero(1)">1</button>
+            <button onclick="agregarNumero(2)">2</button>
+            <button onclick="agregarNumero(3)">3</button>
+            <button class="operador" onclick="agregarOperador('+')">+</button>
+            <button class="operador" onclick="invertirSigno()">±</button>
+            
+            <!-- Quinta fila -->
+            <button onclick="agregarNumero(0)">0</button>
+            <button onclick="agregarParentesisAbrir()">(</button>
+            <button onclick="agregarParentesisCerrar()">)</button>
+            <button onclick="agregarPunto()">.</button>
+            <button class="igual" onclick="calcular()">=</button>
+        </div>
+    </div>
+    
+    <script>
+        let operacionActual = '';
+        let resultadoActual = '0';
+        let modoFraccion = false;
+        
+        const operacionElement = document.getElementById('operacion');
+        const resultadoElement = document.getElementById('resultado');
+        
+        function actualizarPantalla() {
+            operacionElement.textContent = operacionActual;
+            resultadoElement.textContent = resultadoActual;
+        }
+        
+        function agregarNumero(numero) {
+            if (resultadoActual === '0' || resultadoActual === 'Error') {
+                resultadoActual = numero.toString();
+            } else {
+                resultadoActual += numero.toString();
+            }
+            actualizarPantalla();
+        }
+        
+        function agregarOperador(operador) {
+            if (resultadoActual !== 'Error') {
+                operacionActual = resultadoActual + ' ' + operador + ' ';
+                resultadoActual = '0';
+                modoFraccion = false;
+                actualizarPantalla();
+            }
+        }
+        
+        function agregarPunto() {
+            if (!resultadoActual.includes('.') && resultadoActual !== 'Error') {
+                resultadoActual += '.';
+                actualizarPantalla();
+            }
+        }
+        
+        function borrar() {
+            if (resultadoActual !== 'Error') {
+                if (resultadoActual.length > 1) {
+                    resultadoActual = resultadoActual.slice(0, -1);
+                } else {
+                    resultadoActual = '0';
+                }
+                actualizarPantalla();
+            }
+        }
+        
+        function limpiarTodo() {
+            operacionActual = '';
+            resultadoActual = '0';
+            modoFraccion = false;
+            actualizarPantalla();
+        }
+        
+        function calcular() {
+            try {
+                if (operacionActual !== '') {
+                    let expresion = operacionActual + resultadoActual;
+                    expresion = expresion.replace(/×/g, '*').replace(/÷/g, '/');
+                    let resultado = eval(expresion);
+                    operacionActual = expresion + ' =';
+                    resultadoActual = resultado.toString();
+                    actualizarPantalla();
+                }
+            } catch (error) {
+                resultadoActual = 'Error';
+                actualizarPantalla();
+            }
+        }
+        
+        function agregarFraccion() {
+            if (resultadoActual !== 'Error') {
+                if (!modoFraccion) {
+                    operacionActual = resultadoActual;
+                    resultadoActual = '0';
+                    modoFraccion = true;
+                } else {
+                    try {
+                        let numerador = parseFloat(operacionActual);
+                        let denominador = parseFloat(resultadoActual);
+                        if (denominador === 0) {
+                            resultadoActual = 'Error';
+                        } else {
+                            resultadoActual = (numerador / denominador).toString();
+                            operacionActual = numerador + '/' + denominador + ' =';
+                        }
+                        modoFraccion = false;
+                    } catch (error) {
+                        resultadoActual = 'Error';
+                    }
+                }
+                actualizarPantalla();
+            }
+        }
+        
+        function calcularPorcentaje() {
+            if (resultadoActual !== 'Error') {
+                try {
+                    let valor = parseFloat(resultadoActual);
+                    resultadoActual = (valor / 100).toString();
+                    actualizarPantalla();
+                } catch (error) {
+                    resultadoActual = 'Error';
+                    actualizarPantalla();
+                }
+            }
+        }
+        
+        function calcularRaizCuadrada() {
+            if (resultadoActual !== 'Error') {
+                try {
+                    let valor = parseFloat(resultadoActual);
+                    if (valor < 0) {
+                        resultadoActual = 'Error';
+                    } else {
+                        operacionActual = '√(' + valor + ')';
+                        resultadoActual = Math.sqrt(valor).toString();
+                    }
+                    actualizarPantalla();
+                } catch (error) {
+                    resultadoActual = 'Error';
+                    actualizarPantalla();
+                }
+            }
+        }
+        
+        function calcularCuadrado() {
+            if (resultadoActual !== 'Error') {
+                try {
+                    let valor = parseFloat(resultadoActual);
+                    operacionActual = valor + '²';
+                    resultadoActual = (valor * valor).toString();
+                    actualizarPantalla();
+                } catch (error) {
+                    resultadoActual = 'Error';
+                    actualizarPantalla();
+                }
+            }
+        }
+        
+        function invertirSigno() {
+            if (resultadoActual !== 'Error' && resultadoActual !== '0') {
+                if (resultadoActual.charAt(0) === '-') {
+                    resultadoActual = resultadoActual.substring(1);
+                } else {
+                    resultadoActual = '-' + resultadoActual;
+                }
+                actualizarPantalla();
+            }
+        }
+        
+        function agregarParentesisAbrir() {
+            if (resultadoActual === '0' || resultadoActual === 'Error') {
+                resultadoActual = '(';
+            } else {
+                resultadoActual += '(';
+            }
+            actualizarPantalla();
+        }
+        
+        function agregarParentesisCerrar() {
+            if (resultadoActual !== 'Error') {
+                resultadoActual += ')';
+                actualizarPantalla();
+            }
+        }
+    </script>
+</body>
+</html>

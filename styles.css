@@ -1,0 +1,141 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    transition: background-color 0.3s;
+}
+
+.calculadora {
+    width: 90%;
+    max-width: 400px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    background-color: #ffd1dc; /* Rosa pastel por defecto */
+    transition: all 0.3s ease;
+}
+
+.pantalla {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    text-align: right;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.resultado {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.operacion {
+    font-size: 1rem;
+    color: #888;
+    height: 20px;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.botones {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    padding: 10px;
+}
+
+button {
+    padding: 20px 10px;
+    font-size: 1.2rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+button:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.operador {
+    background-color: rgba(255, 255, 255, 0.65);
+    color: #ff6b9d;
+    font-weight: bold;
+}
+
+.igual {
+    background-color: #ff6b9d;
+    color: white;
+    font-weight: bold;
+}
+
+.borrar, .limpiar {
+    background-color: rgba(255, 255, 255, 0.65);
+    color: #ff6b9d;
+}
+
+/* Diseño responsivo */
+@media screen and (min-width: 768px) {
+    .calculadora {
+        max-width: 500px;
+        background-color: #ffd1dc; /* Rosa pastel para pantallas grandes */
+    }
+    
+    .botones {
+        grid-template-columns: repeat(5, 1fr);
+    }
+    
+    .resultado {
+        font-size: 3rem;
+        height: 80px;
+    }
+    
+    button {
+        padding: 25px 15px;
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .calculadora {
+        background-color: #ff6b9d; /* Rosa más fuerte para pantallas pequeñas */
+    }
+    
+    button {
+        padding: 15px 10px;
+    }
+    
+    .operador {
+        background-color: rgba(255, 255, 255, 0.75);
+        color: #ff3377;
+    }
+    
+    .igual {
+        background-color: #ff3377;
+    }
+    
+    .borrar, .limpiar {
+        color: #ff3377;
+    }
+}
